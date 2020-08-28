@@ -1,0 +1,23 @@
+function OnChange(executionContext) {
+    formContext = executionContext.getFormContext()
+    contactType = formContext.getAttribute("cole_contacttype").getValue()
+    if(contactType == 370510000) { // Patient
+        formContext.getControl("cole_insuranceplanid").setVisible(true)
+        formContext.ui.tabs.get("tab_1").sections.get("section_patient_health").setVisible(true);
+        formContext.ui.tabs.get("tab_1").sections.get("section_age").setVisible(true);
+
+        formContext.getControl("cole_serviceproviderid").setVisible(false)
+        formContext.getControl("cole_licensetype").setVisible(false)
+        formContext.getControl("cole_specialization").setVisible(false)
+    }
+    else if (contactType == 370510001) { // Healthcare Professional
+        formContext.getControl("cole_serviceproviderid").setVisible(true)
+        formContext.getControl("cole_licensetype").setVisible(true)
+        formContext.getControl("cole_specialization").setVisible(true)
+
+        formContext.getControl("cole_insuranceplanid").setVisible(false)
+        formContext.ui.tabs.get("tab_1").sections.get("section_patient_health").setVisible(false);
+        formContext.ui.tabs.get("tab_1").sections.get("section_age").setVisible(false);
+
+    }
+}

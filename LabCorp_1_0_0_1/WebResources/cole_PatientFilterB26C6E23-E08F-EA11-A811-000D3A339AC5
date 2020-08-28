@@ -1,0 +1,44 @@
+function filtercontactlookup(executionContext) {
+    try {
+        let formContext = executionContext.getFormContext()
+        formContext.getControl("parentcontactid").addPreSearch(
+            function() {
+                FilterLookupContact(formContext)
+            }
+        )
+        formContext.getControl("header_process_parentcontactid").addPreSearch(
+            function() {
+                FilterLookupContactBPF(formContext)
+            }
+        )
+        formContext.getControl("header_process_cole_healthcareprofessionalcontact").addPreSearch(
+            function() {
+                FilterLookupHealthcareProfessionalBPF(formContext)
+            }
+        )
+    }
+    catch (e) {
+        Xrm.Utility.alertDialog(e.message)
+    }
+}
+
+function FilterLookupContact(formContext)
+{
+    // debugger
+    let filter = "<filter type='and'><condition attribute='cole_contacttype' operator='eq' value='370510000' /></filter>"
+    formContext.getControl("parentcontactid").addCustomFilter(filter)
+}
+
+function FilterLookupContactBPF(formContext)
+{
+    // debugger
+    let filter = "<filter type='and'><condition attribute='cole_contacttype' operator='eq' value='370510000' /></filter>"
+    formContext.getControl("header_process_parentcontactid").addCustomFilter(filter)
+}
+
+function FilterLookupHealthcareProfessionalBPF(formContext)
+{
+    // debugger
+    let filterHealthcareProfessional = "<filter type='and'><condition attribute='cole_contacttype' operator='eq' value='370510001' /></filter>"
+    formContext.getControl("header_process_cole_healthcareprofessionalcontact").addCustomFilter(filterHealthcareProfessional)
+}

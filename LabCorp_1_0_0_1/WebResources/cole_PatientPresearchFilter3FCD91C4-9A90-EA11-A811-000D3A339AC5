@@ -1,0 +1,11 @@
+function FilterLookup()
+{
+    debugger
+
+    // in Oppportunity, adding Patient
+    var filter = "<filter type='and'><condition attribute='contacttype' operator='eq' value='Patient' /></filter>";
+    Xrm.Page.getControl("parentcontactid").addCustomFilter(filter);
+
+    // in elsewhere adding Healthcare Professional
+
+}

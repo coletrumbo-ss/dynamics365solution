@@ -1,0 +1,36 @@
+function OnChange(executionContext) {
+    try {
+        let formContext = executionContext.getFormContext()
+        if(formContext.getAttribute("cole_billingaddressiscontactaddress").getValue()) { // implies there is a contact, the only way to make visible the billingaddressiscontactaddress switch.
+            let patientId = formContext.getAttribute("parentcontactid").getValue()[0].id.slice(1,-1)
+            let req = new XMLHttpRequest()
+            req.open("GET", formContext.context.getClientUrl() + "/api/data/v9.1/contacts(" + patientId + ")?$select=address1_line1,address1_line2,address1_city,address1_stateorprovince,address1_postalcode", true)
+            req.setRequestHeader("OData-MaxVersion", "4.0")
+            req.setRequestHeader("OData-Version", "4.0")
+            req.setRequestHeader("Accept", "application/json")
+            req.setRequestHeader("Content-Type", "application/json charset=utf-8")
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"")
+            req.setRequestHeader("If-None-Match", "W\/\"000000\"") //Change 000000 to your value
+            req.onreadystatechange = function() {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null
+                    if (this.status === 200) {
+                        let result = JSON.parse(this.response)
+                        formContext.getAttribute("cole_billingaddressline1").setValue(result["address1_line1"])
+                        formContext.getAttribute("cole_billingaddressline2").setValue(result["address1_line2"])
+                        formContext.getAttribute("cole_billingaddresscity").setValue(result["address1_city"])
+                        formContext.getAttribute("cole_billingaddressstate").setValue(result["address1_stateorprovince"])
+                        formContext.getAttribute("cole_billingaddresszipcode").setValue(result["address1_postalcode"])
+                    } else if (this.status === 304) { //Handle data not changed
+                    } else {
+                        Xrm.Utility.alertDialog(this.statusText)
+                    }
+                }
+            }
+            req.send()
+        }
+    }
+    catch (e) {
+        Xrm.Utility.alertDialog(e.message)
+    }
+}

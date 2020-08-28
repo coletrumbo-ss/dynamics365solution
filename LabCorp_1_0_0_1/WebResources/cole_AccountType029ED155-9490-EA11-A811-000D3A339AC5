@@ -1,0 +1,13 @@
+function OnChange(executionContext) {
+    debugger
+    let formContext = executionContext.getFormContext()
+    let acctType = formContext.getAttribute("cole_accounttype2")
+
+    if (acctType == 370510000) { //Insurance Company
+        formContext.ui.tabs.get("SUMMARY_TAB").sections.get("section_insurance_company").setVisible(true)
+        formContext.ui.tabs.get("SUMMARY_TAB").sections.get("section_service_provider").setVisible(false)
+    } else if (acctType == 370510001) { // Service Provider
+        formContext.ui.tabs.get("SUMMARY_TAB").sections.get("section_insurance_company").setVisible(false)
+        formContext.ui.tabs.get("SUMMARY_TAB").sections.get("section_service_provider").setVisible(true)
+    }
+}
